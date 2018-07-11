@@ -447,12 +447,13 @@ class JSONRPCService(object):
                 result = yield defer.maybeDeferred(method)
         except JSONRPCError:
             raise
-        except Exception:
+        except Exception as e:
             # Exception was raised inside the method.
             log.msg('Exception raised while invoking RPC method "{}".'.format(
                     request['method']))
             log.err()
-            raise ServerError
+            raise JSONRPCError(e)
+            # raise ServerError
 
         defer.returnValue(result)
 
